@@ -1,0 +1,45 @@
+$color: white;
+$background-color: black;
+$zindex: 999999; // Z-index of the Debug Mode pane.
+
+tw-dialog {
+	z-index: $zindex - 2;
+	border: $color solid 2px;
+	padding: 2em;
+	color: $color;
+	background-color: $background-color;
+	display:block;
+	@media (min-width: 576px) {
+		max-width: 50vw;
+	}
+
+	input[type=text] {
+		font-size: inherit;
+		width:100%;
+		border:solid $color !important;
+	}
+}
+tw-dialog-links {
+	text-align:right;
+	@include flexbox;
+	@include justify-content(flex-end);
+}
+tw-backdrop {
+	z-index: $zindex - 3;
+	position:fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: hsla(0,0%,0%,0.8);
+	@include flexbox;
+	@include align-items(center);
+	@include justify-content(center);
+	/*
+		Currently, it's possible to put multiple dialogs onscreen at once.
+		When this happens, hide all but the first one.
+	*/
+	& ~ tw-backdrop {
+		display:none;
+	}
+}

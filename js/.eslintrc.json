@@ -1,0 +1,93 @@
+{
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "Map": true,
+    "Set": true,
+    "WeakMap": true,
+    "require": true,
+    "define": true,
+    "module": true,
+    "global": true,
+    "StoryFormat": true,
+    "CodeMirror": true,
+    "_": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "eqeqeq": 2,
+    "wrap-iife": [
+      2,
+      "any"
+    ],
+    "no-use-before-define": [
+      2,
+      {
+        "functions": false
+      }
+    ],
+    "no-constant-binary-expression": 2,
+    "no-constructor-return": 2,
+    "no-caller": 2,
+    "no-new": 2,
+    "no-multiple-empty-lines": 1,
+    "strict": [
+      2,
+      "global"
+    ],
+    "no-unused-expressions": [
+      2,
+      {
+        "allowShortCircuit": true, 
+        "allowTernary": true
+      }
+    ],
+    "linebreak-style": 2,
+    "no-prototype-builtins": 0,
+    "no-debugger": 0,
+    "no-new-native-nonconstructor": 1,
+    "no-template-curly-in-string": 1,
+    "default-case-last":1,
+    "grouped-accessor-pairs":1,
+    "no-array-constructor": 1,
+    "no-else-return": 1,
+    "no-irregular-whitespace": [
+      2,
+      { "skipComments": true, "skipStrings": true, "skipTemplates": true }
+    ],
+    "no-lonely-if": 1,
+    "no-var": 1,
+    "no-unexpected-multiline": 0,
+    "object-shorthand": [
+      2,
+      "always"
+    ],
+    "prefer-object-spread": [
+      1
+    ],
+    "dot-notation": 1,
+    "no-extra-bind": 1,
+    "no-lone-blocks": 1,
+    "no-fallthrough": 0,
+    "no-tabs": [
+      1,
+      { "allowIndentationTabs": true }
+    ],
+    "no-trailing-spaces": [
+      1,
+      { "skipBlankLines": true, "ignoreComments": true }
+    ],
+    "no-whitespace-before-property": 1,
+    "rest-spread-spacing": 1,
+    "semi": [
+      1,
+      "always"
+    ],
+    "semi-spacing": 1,
+    "space-before-blocks": 1,
+  }
+}

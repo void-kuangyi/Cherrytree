@@ -1,0 +1,49 @@
+{
+  "name": "twine-harlowe",
+  "version": "3.3.6",
+  "author": "Leon Arnott",
+  "description": "The default runtime for Twine 2 stories",
+  "license": "Zlib",
+  "repository": {
+    "type": "hg",
+    "url": "https://foss.heptapod.net/games/harlowe/"
+  },
+  "contributors": [
+    {
+      "name": "Leon Arnott",
+      "email": null
+    },
+    {
+      "name": "Chris Klimas",
+      "email": "klimas@gmail.com"
+    }
+  ],
+  "engines": {
+    "npm": ">=6.0",
+    "node": ">=14.0"
+  },
+  "dependencies": {
+    "es6-shim": "^0.35.7",
+    "jquery": "^3.6.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.7",
+    "@babel/core": "^7.16.7",
+    "@babel/preset-env": "^7.16.7",
+    "eslint": "^8.32.0",
+    "fs-readdir-recursive": "1",
+    "jasmine-core": "^2.5.2",
+    "jshint": "^2.13.6",
+    "lodash.escape": "4",
+    "lodash.unescape": "4",
+    "marked": "2",
+    "replacestream": "4",
+    "sass": "^1.57.1",
+    "uglify-js": "^3.17.4"
+  },
+  "browserslist": [
+    "IE 10",
+    "Firefox ESR",
+    "last 2 versions"
+  ]
+}

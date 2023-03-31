@@ -1,0 +1,182 @@
+/* Transitions */
+@mixin animation($animations) {
+	animation: $animations;
+}
+
+/* This is also hard-coded in Utils. */
+$time: 0.8s;
+
+/* Invalid/instant transition */
+.transition-in {
+	@include animation(appear 0ms step-start);
+}
+.transition-out {
+	@include animation(appear 0ms step-end);
+}
+
+/* Dissolve/Fade */
+[data-t8n^=dissolve], [data-t8n=fade] {
+	&.transition-in {
+		@include animation(appear $time);
+	}
+	&.transition-out {
+		@include animation(appear $time reverse);
+	}
+}
+
+/* Shudder */
+[data-t8n^=shudder] {
+	&.transition-in {
+		display: inline-block !important;
+		@include animation(shudder-in $time);
+	}
+	&.transition-out {
+		display: inline-block !important;
+		@include animation(shudder-in $time reverse);
+	}
+}
+
+/* Rumble */
+[data-t8n^=rumble] {
+	&.transition-in {
+		display: inline-block !important;
+		@include animation(rumble-in $time);
+	}
+	&.transition-out {
+		display: inline-block !important;
+		@include animation(rumble-in $time reverse);
+	}
+}
+
+/* Pulse */
+[data-t8n^=pulse] {
+	&.transition-in {
+		@include animation(pulse $time);
+		display:inline-block !important;
+	}
+	&.transition-out {
+		@include animation(pulse $time reverse);
+		display:inline-block !important;
+	}
+}
+
+/* Zoom */
+[data-t8n^=zoom] {
+	&.transition-in {
+		@include animation(zoom-in $time);
+		display:inline-block !important;
+	}
+	&.transition-out {
+		@include animation(zoom-in $time reverse);
+		display:inline-block !important;
+	}
+}
+
+/* Blur */
+[data-t8n^=blur] {
+	&.transition-in {
+		@include animation(blur $time);
+		display:inline-block !important;
+	}
+	&.transition-out {
+		@include animation(blur $time reverse);
+		display:inline-block !important;
+	}
+}
+
+/* Slide */
+/*
+	These can't have the hyphen in their data-t8n name because Utils.insensitiveName() removes it.
+	Also, the transition-outs use the reverse direction of the transition-ins to preserve the semantic
+	meaning of the names.
+*/
+[data-t8n^=slideleft] {
+	&.transition-in {
+		@include animation(slide-left $time);
+		display:inline-block !important;
+	}
+	&.transition-out {
+		@include animation(slide-right $time reverse);
+		display:inline-block !important;
+	}
+}
+[data-t8n^=slideright] {
+	&.transition-in {
+		@include animation(slide-right $time);
+		display:inline-block !important;
+	}
+	&.transition-out {
+		@include animation(slide-left $time reverse);
+		display:inline-block !important;
+	}
+}
+[data-t8n^=slideup] {
+	&.transition-in {
+		@include animation(slide-up $time);
+		display:inline-block !important;
+	}
+	&.transition-out {
+		@include animation(slide-down $time reverse);
+		display:inline-block !important;
+	}
+}
+[data-t8n^=slidedown] {
+	&.transition-in {
+		@include animation(slide-down $time);
+		display:inline-block !important;
+	}
+	&.transition-out {
+		@include animation(slide-up $time reverse);
+		display:inline-block !important;
+	}
+}
+[data-t8n^=fadeleft] {
+	&.transition-in {
+		@include animation(fade-left $time);
+		display:inline-block !important;
+	}
+	&.transition-out {
+		@include animation(fade-right $time reverse);
+		display:inline-block !important;
+	}
+}
+[data-t8n^=faderight] {
+	&.transition-in {
+		@include animation(fade-right $time);
+		display:inline-block !important;
+	}
+	&.transition-out {
+		@include animation(fade-left $time reverse);
+		display:inline-block !important;
+	}
+}
+[data-t8n^=fadeup] {
+	&.transition-in {
+		@include animation(fade-up $time);
+		display:inline-block !important;
+	}
+	&.transition-out {
+		@include animation(fade-down $time reverse);
+		display:inline-block !important;
+	}
+}
+[data-t8n^=fadedown] {
+	&.transition-in {
+		@include animation(fade-down $time);
+		display:inline-block !important;
+	}
+	&.transition-out {
+		@include animation(fade-up $time reverse);
+		display:inline-block !important;
+	}
+}
+
+/* Flicker */
+[data-t8n^=flicker] {
+	&.transition-in {
+		@include animation(flicker $time);
+	}
+	&.transition-out {
+		@include animation(flicker $time reverse);
+	}
+}

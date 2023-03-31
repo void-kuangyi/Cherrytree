@@ -1,0 +1,391 @@
+.harlowe-3-toolbarPanel {
+	transition: max-height 0.8s;
+	overflow-y: auto;
+	margin-bottom:4px;
+}
+.harlowe-3-minimised .harlowe-3-toolbarPanel > :not(:last-child) {
+	display:none;
+}
+.harlowe-3-toolbarPanel code:not(:empty) {
+	font-size:1rem;
+	border: 1px dotted hsl(0, 0%, 50%);
+}
+.harlowe-3-toolbarPanel [type="radio"][disabled] ~ * {
+	opacity:0.5;
+}
+.harlowe-3-stylePreview {
+	text-align: center;
+	user-select: none;
+	background: black;
+	color: white;
+	font-family: 'Georgia',serif;
+	padding: 8px;
+	font-size: 1.5rem;
+	margin: 8px auto;
+	width: 60%;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+.harlowe-3-stylePreview textarea {
+	background: black;
+	color: white;
+}
+.harlowe-3-stylePreview > span {
+	display:inline-block;
+}
+.harlowe-3-stylePreview > span:first-child {
+	position:absolute;
+}
+.harlowe-3-stylePreview > span:last-child {
+	position:relative;
+}
+
+/*
+	TwineJS 2.3
+*/
+.harlowe-3-toolbarPanel > button {
+	border-radius: 0.8rem;
+	margin: 0px 2px;
+	padding: 0px 4px;
+	height: 36px;
+	font-size: 1.2rem;
+	min-width: 28px;
+}
+/*
+	TwineJS 2.3
+*/
+.harlowe-3-toolbarPanel > button:not(:active):not(.active):not(:last-child) {
+	border: 1px solid hsla(0,0%,50%,0.5);
+	border-top: none;
+	border-left: none;
+}
+
+.harlowe-3-toolbarCheckboxes {
+	border-bottom: 1px solid hsla(0,0%,50%,0.5);
+	position: relative;
+	padding-bottom: 8px;
+	margin-bottom: 8px
+}
+
+.harlowe-3-toolbarPanel label:not(.harlowe-3-radioRow) {
+	white-space:nowrap;
+}
+
+.harlowe-3-toolbarCheckboxes > label {
+	min-width: 20%;
+	display: inline-block;
+}
+
+.harlowe-3-swatch {
+	width: 24px;
+	height: 24px;
+	display:inline-block;
+	cursor:pointer;
+	border-bottom: 1px solid hsla(0,0%,50%,0.5);
+	border-right: 1px solid hsla(0,0%,50%,0.5);
+}
+
+.harlowe-3-labeledInput {
+	position: relative;
+	padding-bottom: 8px;
+}
+
+.harlowe-3-labeledInput > input[type=text] {
+	display: inline-block;
+	font-size: 1rem;
+}
+
+.harlowe-3-labeledInput > input[type=range] {
+	vertical-align:middle;
+}
+
+.harlowe-3-labeledInput > input[type=number] {
+	box-shadow: 0 1px 0 hsla(0,0%,50%,0.5);
+	background: transparent;
+	color: inherit;
+	border: none;
+	font-family: 'Source Code Pro', monospace;
+	font-family: var(--font-monospaced);
+	width: 4rem;
+	margin: 0 0.5rem;
+	display: inline-block;
+	font-size: 1rem
+}
+
+.harlowe-3-radioRow {
+	margin: 8px 0px;
+	display: block;
+}
+
+.harlowe-3-radioRow .harlowe-3-radioRow {
+	margin-left: 2rem;
+}
+
+.harlowe-3-toolbarPanel > * > .harlowe-3-radioRow {
+	border-bottom: 1px solid hsla(0,0%,50%,0.5);
+	padding-bottom: 8px;
+}
+.harlowe-3-confirmButtons > span {
+	display:inline-block;
+	align-items:center;
+}
+.harlowe-3-resultCode {
+	max-width:50%;
+	overflow-x:auto;
+	white-space:pre;
+	display:inline-block;
+	padding:1px 0px;
+}
+.harlowe-3-resultCode * {
+	white-space:nowrap;
+}
+.harlowe-3-toolbarBullet {
+	padding:0px 2px;
+	color:hsla(0,0%,50%,0.5);
+}
+.harlowe-3-toolbarBullet::before {
+	content:"•";
+}
+.harlowe-3-bgColourButton {
+	display:inline-block;
+	border-radius:8px;
+	width:16px;
+	height:16px;
+	margin-bottom:-2px;
+	background:linear-gradient(to right,
+		hsla(0,100%,50%,0.5),   hsla(30,100%,50%,0.5),  hsla(60,100%,50%,0.5),  hsla(120,100%,50%,0.5),
+		hsla(180,100%,50%,0.5), hsla(240,100%,50%,0.5), hsla(300,100%,50%,0.5), hsla(320,100%,50%,0.5));
+}
+.harlowe-3-gradientBar {
+	display:inline-block;
+	position:relative;
+	width:75%;
+	height:32px;
+	margin:12px 8px 96px 40px;
+	border:1px solid hsla(0,0%,50%,0.5);
+	border-radius:5px;
+}
+.harlowe-3-gradientBar + button {
+	position:absolute;
+	top:8px;
+	right:8px;
+}
+.harlowe-3-colourStop {
+	position:absolute;
+	height:48px;
+	width:16px;
+	background: hsla(0,0%,50%,0.5);
+	border-radius:5px;
+	cursor:grab;
+}
+.harlowe-3-colourStop:active {
+	cursor:grabbing;
+}
+.harlowe-3-colourStopButtons {
+	display:none;
+	position:relative;
+	top: 64px;
+	width: 540px;
+	background:hsla(0,0%,50%,0.5);
+	padding: 8px;
+	cursor:auto;
+}
+.harlowe-3-colourStop[selected] {
+	border-bottom-right-radius:0px;
+	border-bottom-left-radius:0px;
+	height:64px;
+}
+.harlowe-3-colourStop[selected] > .harlowe-3-colourStopButtons {
+	display:block;
+}
+.harlowe-3-singleColourPicker {
+	display:inline-block;
+}
+.harlowe-3-singleColourPicker select {
+	position: relative;
+	top: -4px;
+	font-size: 1rem;
+	margin-left: 8px;
+}
+.harlowe-3-directionPicker {
+	width:48px;
+	height:48px;
+	border-radius:24px;
+	border:1px solid hsla(0,0%,50%,0.5);
+	display:inline-block;
+}
+.harlowe-3-hideCode .cm-harlowe-3-root:not(.cm-harlowe-3-text):not(.cm-harlowe-3-string):not(.cm-harlowe-3-verbatim) {
+	opacity:0.25;
+}
+.harlowe-3-hideHelpTooltip .harlowe-3-helpTooltip {
+	display:none;
+}
+.harlowe-3-tooltip {
+	font-family: var(--font-system);
+	max-width:20vw;
+	position:absolute;
+	border:1px solid hsla(0,0%,50%,0.5);
+	padding:8px;
+	display:block;
+	z-index:8;
+}
+/*
+	TwineJS 2.3
+*/
+[data-version^="2.3"] .harlowe-3-tooltip {
+	font-family: "Source Sans Pro", sans-serif;
+}
+.theme-light .harlowe-3-tooltip, [data-app-theme="light"] .harlowe-3-tooltip {
+	background:white;
+}
+.theme-dark .harlowe-3-tooltip, [data-app-theme="dark"] .harlowe-3-tooltip {
+	background:black;
+}
+.harlowe-3-tooltipMacroSignature {
+	display:block;
+	padding-top:0.5em;
+	margin-top:0.5em;
+	border-top:1px solid hsla(0,0%,50%,0.5);
+}
+.harlowe-3-tooltipTail {
+	position:absolute;
+	height:0;
+	width:0;
+	border:12px solid transparent;
+	border-bottom-color: hsla(0,0%,50%,0.5);
+}
+.harlowe-3-tooltipTail::after {
+	content:'';
+	position:absolute;
+	height:0;
+	width:0;
+	left:-12px;
+	top:-10px;
+	border:12px solid transparent;
+}
+.harlowe-3-completion {
+	max-height:12em;
+	overflow-y:scroll;
+}
+.harlowe-3-tooltipItemSelected {
+	background-color: #888;
+	background-color: var(--light-gray-translucent);
+}
+.theme-light .harlowe-3-tooltipTail::after, [data-app-theme="light"] .harlowe-3-tooltipTail::after {
+	border-bottom-color: white;
+}
+.theme-dark .harlowe-3-tooltipTail::after, [data-app-theme="dark"] .harlowe-3-tooltipTail::after  {
+	border-bottom-color: black;
+}
+.harlowe-3-dataEmptyRow:not(:last-child) {
+	display:none;
+}
+.harlowe-3-dataRow .harlowe-3-dropdownRowLabel {
+	font-family: 'Source Code Pro', monospace;
+	font-family: var(--font-monospaced);
+}
+.harlowe-3-textareaRows {
+	margin-bottom:0.5em;
+}
+.harlowe-3-nonZeroRows > :first-child > .harlowe-3-rowMinus {
+	display:none;
+}
+.harlowe-3-datavalueRows {
+	margin-left: 6px;
+	padding-left:6px;
+	border-left: 1px solid hsla(0,0%,50%,0.5);
+}
+.harlowe-3-toolbarPanel [invalid]::after {
+	display:block;
+	position:absolute;
+	content:attr(invalid);
+	background-color:hsla(17,100%,50%,0.5); /* Synchronised with codemirrorcss.js */
+	right:0px;
+	bottom:8px;
+}
+/*
+	Can't have hints be visible for nested rows, because they'd eat up too much vertical space.
+*/
+.harlowe-3-datavalueRows .harlowe-3-datavalueRows .harlowe-3-datavalueRowHint {
+	display:none;
+}
+/*
+	TwineJS 2.4+
+*/
+.story-format-toolbar .icon > img:only-child { margin-right: 0px; }
+.harlowe-3-toolbarPanel .harlowe-3-confirmButtons { display:flex; justify-content: end; }
+.passage-edit-dialog.collapsed .harlowe-3-toolbarPanel {
+	display:none;
+}
+.harlowe-3-scrollWrapper {
+	overflow: hidden auto;
+	max-height: 60vh;
+}
+.harlowe-3-toolbarPanel a[href] {
+	color: var(--dark-blue);
+	font-weight: bold;
+}
+.harlowe-3-toolbarPanel.card {
+	position: absolute;
+	width:576px;
+	height: auto;
+	top:0px;
+	padding:8px;
+}
+.story-format-toolbar + .harlowe-3-toolbarPanel .harlowe-3-confirmButtons {
+	justify-content: start;
+	flex-flow: row-reverse;
+}
+.harlowe-3-toolbarPanel textarea, .harlowe-3-toolbarPanel [type="text"] {
+	background: var(--white-translucent);
+	border-radius: var(--corner-round);
+	border: 1px solid var(--faint-gray);
+	color: var(--dark-gray);
+}
+/*
+	Apply checkbox styling to line up with 2.4's design.
+*/
+html:not([data-version^="2.3"]) .harlowe-3-toolbarPanel [type="checkbox"] {
+	background: transparent;
+	border: 2px solid var(--dark-gray);
+	width:16px;
+	height:16px;
+	appearance:none;
+	position:relative;
+	border-radius:2px;
+	vertical-align: middle;
+}
+html:not([data-version^="2.3"]) .harlowe-3-toolbarPanel [type="checkbox"]:checked::before {
+	content: "✔";
+	position: absolute;
+	right: -2px;
+	top: -4px;
+	margin-right:3px;
+}
+/*
+	A simple dropdown menu colour fix.
+*/
+select > option {
+	background-color: var(--light-gray);
+	color: var(--dark-gray) !important;
+}
+/*
+	Because radioRows and checkboxes can have entire other interface elements (like colour pickers) as children,
+	they can't just be given icon-button as-is.
+*/
+.harlowe-3-radioRow {
+	padding-left: 0px;
+	padding-right: 0px;
+	user-select:none;
+	position:relative;
+}
+.harlowe-3-radioRow > :first-child, .harlowe-3-radioRow > :nth-child(2) {
+	cursor:pointer;
+}
+.harlowe-3-radioRow > div {
+	padding: var(--grid-size);
+}
+.harlowe-3-toolbarPanel select {
+	padding: var(--grid-size);
+}

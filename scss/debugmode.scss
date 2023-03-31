@@ -1,0 +1,668 @@
+/*** Debug mode ***/
+$zindex: 999999;
+
+@mixin sourceCode {
+	font-family:monospace;
+	font-size:1rem;
+	white-space:pre-wrap;
+	overflow-wrap:anywhere;
+}
+
+.dom-debug-mode {
+	/*
+		CSS preview
+	*/
+	tw-story, tw-passage, tw-sidebar, tw-include, tw-hook, tw-expression, tw-link, tw-dialog, tw-columns, tw-column, tw-align {
+		$cssPreviewColour: hsl(320,80%,80%);
+		$cssPreviewColour2: hsl(30,100%,80%);
+		outline: 1px solid $cssPreviewColour;
+		min-height:32px;
+		display:block !important;
+		&::before {
+			position:absolute;
+			top:0;
+			left:0;
+			height:16px;
+			background-color: $cssPreviewColour;
+			color:black;
+			font-size:16px;
+			font-weight:normal;
+			font-style:normal;
+			font-family:monospace;
+			display:inline-block;
+			line-height:100%;
+			white-space:pre;
+			z-index: $zindex - 2;
+		}
+		&:hover {
+			outline: 1px solid  $cssPreviewColour2;
+			&::before {
+				background-color: $cssPreviewColour2;
+				transition: background-color 1s;
+			}
+		}
+	}
+	tw-passage, tw-include, tw-hook, tw-expression, tw-link, tw-dialog, tw-columns, tw-column, tw-align {
+		padding:1em;
+		margin:0;
+	}
+	tw-story::before {
+		content: "<tw-story tags=\"" attr(tags) "\">";
+	}
+	tw-passage::before {
+		top:-16px;
+		content: "<tw-passage tags=\"" attr(tags) "\">";
+	}
+	tw-sidebar::before {
+		top:-16px;
+		content: "<tw-sidebar>";
+	}
+	tw-hook::before {
+		content: "<tw-hook name=\"" attr(name) "\">";
+	}
+	tw-expression {
+		&::before {
+			content: "<tw-expression name=\"" attr(name) "\">";
+		}
+	}
+	tw-link::before {
+		content: "<tw-link name=\"" attr(name) "\">";
+	}
+	tw-dialog::before {
+		content: "<tw-dialog>";
+	}
+	tw-columns::before {
+		content: "<tw-columns>";
+	}
+	tw-column::before {
+		content: "<tw-column>";
+	}
+	tw-align::before {
+		content: "<tw-align>";
+	}
+	tw-include::before {
+		content: "<tw-include type=\"" attr(type) "\" name=\"" attr(name) "\">";
+	}
+}
+
+// Don't display this by default.
+tw-open-button[goto] {
+	display: none
+}
+
+.debug-mode {
+	@mixin tiny-annotation() {
+		font-size: 0.8rem;
+		padding-left: 0.2rem;
+		padding-right: 0.2rem;
+		vertical-align: top;
+	}
+
+	tw-open-button[replay], tw-open-button[goto] {
+		display:inline;
+	}
+
+	tw-expression {
+		display:inline-block !important;
+		
+		&[type=variable] {
+			&::after {
+				@include tiny-annotation();
+				content: "$" attr(name)
+			}
+		}
+		&[type=tempVariable] {
+			&::after {
+				@include tiny-annotation();
+				content: "_" attr(name)
+			}
+		}
+		/* Colours for macro return types. These are hand-copied from typecolours.js, with different alpha */
+		&[return=boolean]    { background-color:hsla(0,0%,70%,0.2) }
+		&[return=array]      { background-color:hsla(0,100%,70%,0.2) }
+		&[return=dataset]    { background-color:hsla(30,100%,50%,0.2) }
+		&[return=number]     { background-color:hsla(30,100%,70%,0.2) }
+		&[return=datamap]    { background-color:hsla(60,100%,70%,0.2) }
+		&[return=changer]    { background-color:hsla(90,100%,70%,0.2) }
+		&[return=lambda]     { background-color:hsla(120,100%,70%,0.2) }
+		&[return=hookname]   { background-color:hsla(160,100%,70%,0.2) }
+		&[return=string]     { background-color:hsla(180,100%,70%,0.2) }
+		&[return=datatype]   { background-color:hsla(220,100%,70%,0.2) }
+		&[return=gradient],
+		&[return=colour]     { background-color:hsla(280,100%,70%,0.2) }
+		&[return=instant],
+		&[return=macro]      { background-color:hsla(320,80%,70%,0.2) }
+		&[return=command]    { background-color:hsla(240,100%,80%,0.2) }
+
+		/* False hooks have a special colour */
+		&.false {
+			background-color: hsla(0,100%,50%,0.2) !important;
+		}
+
+		/* Show the macro call */
+		&[type=macro]::before {
+			content: "(" attr(name) ":)";
+			padding: 0 0.5rem;
+			font-size: 1rem;
+			vertical-align: middle;
+			line-height: normal;
+			background-color:  inherit;
+			border: 1px solid rgba(255,255,255,0.5);
+		}
+		/* Show the help cursor if it has a title tip */
+		&[title]:not([title='']) {
+			cursor: help;
+		}
+	}
+
+	/* Colours for other things */
+	tw-hook {
+		background-color: hsla(220,100%,50%,0.1) !important;
+		
+		/*
+			Show the hook syntax. This should line up with what Harlowe expects.
+			
+			But, of course, anonymous hooks shouldn't be highlighted like this.
+		*/
+		&::before {
+			@include tiny-annotation();
+			content: "["
+		}
+		&::after {
+			@include tiny-annotation();
+			content: "]"
+		}
+		&[name] {
+			/* Show the IDs of named hooks */
+			&::after {
+				@include tiny-annotation();
+				content: "]<" attr(name) "|"
+			}
+		}
+	}
+	tw-pseudo-hook {
+		background-color: hsla(40,100%,50%,0.1) !important;
+	}
+	tw-collapsed {
+		&::before {
+			@include tiny-annotation();
+			content: "{"
+		}
+		&::after {
+			@include tiny-annotation();
+			content: "}"
+		}
+	}
+	tw-verbatim {
+		&::before, &::after {
+			@include tiny-annotation();
+			content: "`"
+		}
+	}
+	tw-align {
+		&[style*="text-align: center"] {
+			background: linear-gradient(to right, hsla(14,100%,87%,0) 0%, hsla(14,100%,87%,0.25) 50%, hsla(14,100%,87%,0) 100%);
+		}
+		&[style*="text-align: left"] {
+			background: linear-gradient(to right, hsla(14,100%,87%,0.25) 0%, hsla(14,100%,87%,0) 100%);
+		}
+		&[style*="text-align: right"] {
+			background: linear-gradient(to right, hsla(14,100%,87%, 0) 0%, hsla(14,100%,87%,0.25) 100%);
+		}
+	}
+	tw-column {
+		background-color: hsla(204, 99%, 87%, 0.2);
+	}
+	
+	tw-enchantment {
+		animation: enchantment 0.5s infinite;
+		border: 1px solid;
+	}
+	
+	/* Show destinations of links */
+	tw-link::after,
+	tw-broken-link::after {
+		@include tiny-annotation();
+		content: attr(passage-name);
+	}
+	
+	tw-include {
+		background-color: hsla(30,60%,50%,0.1);
+		&::before {
+			@include tiny-annotation();
+			content: attr(type) " \"" attr(name) "\"";
+		}
+	}
+}
+
+// The "peek behind dialogs" tool.
+.debug-dialogs {
+	tw-backdrop:not(.eval-replay):not(.harlowe-crash) {
+		pointer-events: none;
+		opacity:0.1;
+	}
+}
+
+// Debug Replays can be seen outside of "Debug View" if they are on <tw-error>s.
+tw-eval-replay {
+	tw-eval-code, tw-eval-explanation {
+		max-height: 20vh;
+		overflow: auto;
+		margin:10px auto;
+	}
+	tw-eval-code {
+		display:block;
+		font-family: monospace;
+		padding-bottom: 1ex;
+		border-bottom: 2px solid gray;
+	}
+	tw-eval-explanation {
+		display:block;
+		text-align:center;
+		& > code {
+			white-space: pre-wrap;
+			&.from-block {
+				width: 40%;
+				display: inline-block;
+				text-align:left;
+				max-height: 4em;
+				overflow-wrap: anywhere;
+				overflow-y: scroll;
+				& ~ .to-desc {
+					width: calc(40% - 2em);
+					margin-left: 2em;
+					display: inline-block;
+				}
+				& + span::after {
+					content: "...";
+				}
+			}
+			&.from-inline {
+				text-align: right;
+			}
+		}
+		& > :nth-child(2) {
+			white-space:pre;
+		}
+		& > .to-desc {
+			text-align:left;
+		}
+		& > table {
+			width:100%;
+			margin-top:1em;
+			& td {
+				white-space: pre-wrap !important;
+				word-wrap: anywhere;
+			}
+		}
+	}
+	tw-eval-reason {
+		text-align:center;
+		font-size:80%;
+		font-style:italic;
+		display:block;
+	}
+	tw-eval-it {
+		text-align:center;
+		font-size:80%;
+		display:block;
+	}
+	tw-dialog-links {
+		@include flexbox;
+		@include justify-content(space-around);
+	}
+}
+
+@keyframes enchantment {
+	0%,to { border-color: hsl( 30,100%,70%) }
+	50%   { border-color: hsl(160,100%,70%) }
+}
+
+$borderwidth: 2px;
+$borderradius: 0.5em;
+
+// Dark Mode
+$colorLit: hsl(0, 0%, 90%);
+$color: hsl(0, 0%, 85%);
+$colorDimmer: hsl(0, 0%, 66%);
+$bg: black;
+$bgDim: hsl(0, 0%, 13%);
+$bgDimmer: hsl(0, 0%, 26%);
+$bgDimmest: hsl(0, 0%, 40%);
+
+// Light Mode
+$colorLit2: black;
+$color2: hsl(0, 0%, 15%);
+$colorDimmer2: hsl(0, 0%, 34%);
+$bg2: white;
+$bgDim2: hsl(0, 0%, 90%);
+$bgDimmer2: hsl(0, 0%, 85%);
+$bgDimmest2: hsl(0, 0%, 60%);
+
+$size: 1.25em;
+
+tw-debugger {
+	// Dimensions and position
+	position:fixed;
+	box-sizing:border-box;
+	bottom:0;
+	right:0;
+	z-index: $zindex;
+	min-width: 14em;
+	min-height: 1em;
+	padding: 0em 0.5em 0.5em 1em;
+
+	// Panel fading
+	&.fade-panel:not(:hover) {
+		opacity: 0.33;
+	}
+
+	// Font
+	font-size: $size;
+	font-family: sans-serif;
+	color: $color2; background-color: $bg2;
+	&.theme-dark { color: $color; background-color: $bg; }
+
+	// Design
+	border: {
+		left: solid $color2 $borderwidth;
+		top: solid $color2 $borderwidth;
+		top-left-radius: $borderradius;
+	}
+	&.theme-dark {
+		border-color: $color transparent transparent $color;
+	}
+	opacity: 1;
+
+	// Components
+	select {
+		margin-right: 1em;
+		width: 12em;
+	}
+	button, tw-link {
+		border-radius: 3px;
+		border: solid $bgDimmest2 1px;
+		margin: auto 4px;
+		color: $color2; background-color: $bg2;
+
+		cursor: pointer;
+		&.enabled {
+			color:$colorLit2; background-color: $bgDimmer2;
+			box-shadow: inset $bgDimmest2 3px 5px 0.5em;
+		}
+	}
+	&.theme-dark {
+		button, tw-link {
+			color: $color; background-color: $bg; border-color: $bgDimmest;
+			&.enabled {
+				color: $colorLit; background-color: $bgDimmer; box-shadow: inset $bgDimmest 3px 5px 0.5em;
+			}
+		}
+	}
+	button {
+		font-size: $size - 0.25em;
+		/*
+			These are necessary for the documentation's editor.
+		*/
+		overflow-x: hidden;
+		text-overflow: ellipsis;
+		white-space: pre;
+	}
+	tw-link {
+		font-size: $size;
+		border-radius: 16px;
+		border-style: solid;
+		border-width: 2px;
+		text-align:center;
+		padding:0px 8px;
+		display:block;
+		&:hover {
+			border-color: $color2; color: $color2;
+		}
+	}
+	&.theme-dark tw-link:hover { border-color: $color; color: $color; }
+	tw-dialog {
+		background-color: $bg2; color: $colorLit2;
+		font-size: $size;
+	}
+	&.theme-dark tw-dialog { background-color: $bg; color: $colorLit; }
+	.panel {
+		@include flexbox;
+		@include flex-direction(column);
+
+		// Dimensions and position
+		position:absolute;
+		bottom:100%;
+		left:-$borderwidth;
+		right: 0;
+		padding:1em;
+		overflow-y: scroll;
+		overflow-x: hidden;
+
+		// Design
+		border:inherit;
+		// This box-sizing is to ensure that jQuery .height() works correctly.
+		box-sizing:content-box;
+		background-color:$bg2;
+		border-bottom: solid $bgDimmest2 $borderwidth;
+		border-top-left-radius: $borderradius;
+		border-bottom-left-radius: $borderradius;
+
+		// Font
+		font-size:0.8em;
+
+		// Hide when empty or hidden
+		&:empty, &[hidden] {
+			display:none;
+		}
+	}
+	&.theme-dark .panel { background-color: $bg; border-bottom-color: $bgDimmest; }
+	.panel-source {
+		.panel-row-buttons {
+			width:2rem;
+		}
+		.source-tags {
+			width:20%;
+			font-style:italic;
+		}
+	}
+	.panel-row-source td {
+		@include sourceCode();
+		max-height: 8rem;
+		padding: 1rem;
+	}
+	@mixin emptyMsg {
+		font-style:italic;
+		color:$colorDimmer2;
+		text-align:center;
+	}
+	.panel-rows {
+		width:100%;
+		overflow-x:scroll;
+		> * {
+			display:table-row;
+		}
+		// nth-of=type() is necessary, as there are interstitial rows (<tr> instead of <div>) that represent
+		// the (source:) of the previous row, which should be ignored with respect to row colouring.
+		> div:nth-of-type(2n) {
+			background-color:$bgDim2;
+		}
+	}
+	.panel-tools .panel-rows > *, .panel-options .panel-rows > * {
+		margin-top: 0.4rem;
+		display:block;
+	}
+	&.theme-dark .panel-rows > div:nth-of-type(2n) { background-color:$bgDim; }
+	.panel-row-buttons {
+		text-align: right;
+	}
+	.panel-variables .panel-rows:empty::before {
+		content:"~ No variables ~";
+		@include emptyMsg();
+	}
+	.panel-enchantments .panel-rows:empty::before {
+		content:"~ No enchantments ~";
+		@include emptyMsg();
+	}
+	.panel-errors .panel-rows:empty {
+		&::before {
+			content:"~ No errors... for now. ~";
+			@include emptyMsg();
+		}
+		& + .panel-errors-bottom {
+			display:none;
+		}
+	}
+	&.theme-dark {
+		.panel-variables .panel-rows:empty::before,
+		.panel-enchantments .panel-rows:empty::before,
+		.panel-errors .panel-rows:empty::before {
+			color:$colorDimmer;
+		}
+	}
+	.panel-rows:empty + .panel-variables-bottom {
+		display:none;
+	}
+	th[data-col] {
+		/*
+			The arrow points from big to small.
+		*/
+		&[data-order=asc]::after {
+			content:"↓";
+		}
+		&[data-order=desc]::after {
+			content:"↑";
+		}
+		text-decoration:underline;
+		cursor:pointer;
+	}
+	.panel-storylets:not(.panel-exclusive) .storylet-exclusive,
+	.panel-storylets:not(.panel-urgent) .storylet-urgent {
+		display:none;
+	}
+	.storylet-exclusive, .storylet-urgent, .storylet-open {
+		text-align:center;
+	}
+	.panel-variables-bottom {
+		padding-top:5px;
+	}
+	.enchantment-row {
+		min-height:1.5em;
+	}
+	.variable-path {
+		opacity:0.4;
+	}
+	.temporary-variable-scope, .enchantment-local  {
+		font-family:sans-serif;
+		font-weight:normal;
+		opacity:0.8;
+		font-size:0.75em;
+		&:not(:empty)::before {
+			content: " in ";
+		}
+	}
+	.variable-name, .enchantment-name {
+		font-family:monospace;
+		font-weight:bold;
+	}
+	.variable-type {
+		color:$colorDimmer2;
+		font-weight:normal;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		max-width: 10em;
+	}
+	&.theme-dark .variable-type { color:$colorDimmer; }
+	.error-row {
+		display:table-row;
+		background-color: hsla(312, 72%, 65%, 0.3);
+		&:nth-of-type(2n) {
+			background-color: hsla(312, 72%, 75%, 0.3);
+		}
+		> * {
+			display:table-cell;
+			padding: 0.25em 0.5em;
+		}
+		.error-message[title]:not([title='']) {
+			cursor: help;
+		}
+		.error-passage {
+			color:$colorDimmer2;
+		}
+	}
+	&.theme-dark .error-row .error-passage { color:$colorDimmer; }
+	.storylet-row {
+		background-color: hsla(160, 62%, 85%, 0.3);
+		&:nth-child(2n) {
+			background-color: hsla(160, 62%, 75%, 0.3);
+		}
+		&.storylet-closed {
+			font-style: italic;
+			background-color: $bg2;
+			&:nth-child(2n) {
+				background-color: $bgDim2;
+			}
+			> :not(.storylet-lambda) {
+				opacity: 0.6;
+			}
+		}
+		.storylet-error & {
+			background-color: hsla(312, 72%, 65%, 0.3);
+			&:nth-child(2n) {
+				background-color: hsla(312, 72%, 75%, 0.3);
+			}
+		}
+		.storylet-name, .storylet-value {
+			display:inline-block;
+			width:50%;
+		}
+		.storylet-lambda {
+			@include sourceCode();
+		}
+	}
+	&.theme-dark .storylet-row.storylet-closed {
+		background-color: $bg;
+		&:nth-child(2n) {
+			background-color: $bgDim;
+		}
+	}
+	.tabs {
+		padding-bottom: 0.5em;
+	}
+	.tab {
+		border-radius: 0px 0px 0.5em 0.5em;
+		border-top: none;
+		// Keeps the tab touching the top of the frame.
+		top: -2px;
+	}
+	.resizer-h {
+		position: absolute;
+		height: 14em;
+		border-left: 2px solid $bgDimmest2;
+		border-right: 2px solid $bgDimmest2;
+		top: 10px;
+		left: 4px;
+		width: 8px;
+		cursor: ew-resize;
+	}
+	&.theme-dark .resizer-h { border-color:transparent $bgDimmest; }
+	.resizer-v {
+		position: absolute;
+		height: 8px;
+		border-top: 2px solid $bgDimmest2;
+		border-bottom: 2px solid $bgDimmest2;
+		margin-bottom: 4px;
+		top: 4px;
+		left: 10px;
+		width: 95%;
+		cursor: ns-resize;
+		box-sizing:border-box;
+	}
+	&.theme-dark .resizer-v { border-color:$bgDimmest transparent; }
+
+	// Used for marking highlighed syntax
+	mark {
+		color: inherit;
+		background-color: hsla(180, 72%, 65%, 0.3) !important;
+	}
+}

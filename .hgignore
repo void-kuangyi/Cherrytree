@@ -1,0 +1,11 @@
+syntax: glob
+*.swp
+node_modules/*
+dist/*
+build/*
+*.bat
+.sass-cache*
+*.sh
+package-lock.json
+.vscode
+untracked/*

@@ -1,0 +1,303 @@
+$color: white;
+$background-color: black;
+
+/*
+	<html> should be left alone, except where needed to accomodate <tw-story>.
+*/
+html {
+	margin: 0;
+	// This allows <tw-story> to cover the entire page
+	height:100%;
+	overflow-x:hidden;
+}
+/*
+	This enables border-box on every element by default, unless overridden
+	by a parent element.
+	It also enables position:relative by default, which allows top, left, etc.
+	to be used heedlessly.
+*/
+*, :before, :after {
+	position: relative;
+	box-sizing: inherit;
+}
+// This is just a reset.
+body {
+	margin: 0;
+	// This allows <tw-story> to cover the entire page
+	height:100%;
+}
+
+/*
+	<tw-storydata> houses the raw passage data of the story.
+	Of course, it can't be visible.
+*/
+tw-storydata {
+	display: none;
+}
+
+/*
+	The <tw-story> element houses all of the <tw-passage>s.
+	This element can be styled by setting a ChangerCommand to ?page
+*/
+tw-story {
+	@include flexbox;
+	@include flex-direction(column);
+	
+	font: 100% Georgia, serif;
+	// Use the more intuitive box model.
+	box-sizing: border-box;
+	// In case enchantments opt into content-box, their descendants
+	// should still use border-box.
+	[style*=content-box] * {
+		box-sizing: border-box;
+	}
+
+	/*
+		Instead of a 60% width, this uses 40% horizontal padding (applied below).
+	*/
+	width: 100%;
+	min-height: 100%;
+	/*
+		This is the base font size, which is permuted below.
+	*/
+	$font-size: 1.5em;
+	
+	font-size:   $font-size;
+	line-height: $font-size;
+	
+	/*
+		The <tw-story>'s default distance from the top and bottom of the page is 5%.
+	*/
+	padding: 5% 5%;
+	@media (min-width: 576px) {
+		padding: 5% 20%;
+	}
+
+	/*
+		This is necessary to make certain CSS animations (mainly slide-left) work with passages.
+	*/
+	overflow: hidden;
+
+	background-color: $background-color;
+	color: $color;
+
+	/*
+		Consecutive line breaks should consume less height than they normally would.
+		Renderer converts those <br>s into this element.
+	*/
+	tw-consecutive-br {
+		display: block;
+		height: 1.6ex;
+		visibility: hidden;
+	}
+	/*
+		These are created by (dropdown:).
+		This selector should be more specific, but I'm concerned about it being harder for user stylesheets
+		to override... so I'm leaving it as-is.
+	*/
+	select {
+		&:not([disabled]) {
+			color: inherit;
+		}
+		background-color: transparent;
+		font:inherit;
+		border-style:solid;
+		padding: 2px;
+	}
+	/*
+		These are created by (input-box:).
+	*/
+	textarea {
+		resize:none;
+		background-color: transparent;
+		font:inherit;
+		color:inherit;
+		border-style:none;
+		padding: 2px;
+	}
+	/*
+		These are created by (input:)
+	*/
+	input[type=text] {
+		background-color: transparent;
+		font:inherit;
+		color:inherit;
+		border-style:none;
+	}
+
+	/*
+		These are created by (checkbox:).
+	*/
+	input[type=checkbox] {
+		transform: scale(1.5);
+		margin:0 0.5em 0.5em 0.5em;
+		vertical-align: middle;
+	}
+
+	/*
+		This animation for the <noscript> element should ideally prevent a "flash of unstyled content" where the
+		message is briefly visible.
+	*/
+	& tw-noscript {
+		animation: appear 0.8s;
+	}
+}
+
+/*
+	The <tw-passage> element houses a single passage, including its sidebar.
+*/
+tw-passage {
+	display: block;
+}
+
+/*
+	The <tw-sidebar> is the first element in a <tw-passage>, and is placed to the left
+	when the story begins.
+*/
+tw-sidebar {
+	@media (min-width: 576px) {
+		left: -5em;
+		width: 3em;
+		tw-enchantment[style*="width"] > & {
+			width: inherit;
+		}
+		position:absolute;
+		@include flex-direction(column);
+	}
+	text-align: center;
+	@include flexbox;
+	@include justify-content(space-between);
+}
+
+/*
+	A <tw-icon> is, at present, a sidebar button.
+*/
+tw-icon {
+	display: inline-block;
+	margin: 0.5em 0;
+	font-size: 66px;
+	font-family:"Verdana",sans-serif;
+	&[alt] {
+		opacity: 0.2;
+		&:hover {
+			opacity: 0.4;
+		}
+		cursor:pointer;
+	}
+	&[data-label]::after {
+		font-weight:bold;
+		content:attr(data-label);
+		font-size:20px;
+		bottom:-20px;
+		left:-50%;
+		white-space:nowrap;
+	}
+}
+
+/*
+	A <tw-meter> is a special element produced by (meter:).
+*/
+tw-meter {
+	display:block;
+}
+
+/*** Inner passage formatting ***/
+
+/*
+	These are the primary clickable game elements:
+	<tw-link>  : passage links
+	.link      : enchantment links
+	tw-icon    : the undo button
+*/
+
+// This ensures that hooks styled with borders, etc. won't be visible if they have their
+// contents suppressed by an (if:) macro.
+tw-hook:empty, tw-expression:empty {
+	display:none;
+}
+
+tw-error {
+	display: inline-block;
+	border-radius: 0.2em;
+	padding: 0.2em;
+	font-size: 1rem;
+	cursor: help;
+	white-space:pre-wrap;
+	&.error {
+		background-color: hsla(312, 72%, 55%, 0.6); // A demure pink
+		color:$color;
+	}
+	&.warning {
+		background-color: hsla(30, 72%, 55%, 0.6); // A stained orange
+		color:$color;
+		display: none; // Only available in debug mode.
+		.debug-mode & {
+			display: inline;
+		}
+	}
+}
+tw-error-explanation {
+	display: block;
+	font-size: 0.8rem;
+	line-height: 1rem;
+}
+tw-open-button, tw-folddown {
+	cursor: pointer;
+	line-height: 0em;
+	border-radius: 4px;
+	border: 1px solid hsla(0, 0%, 100%, 0.5);
+	font-size: 0.8rem;
+	margin: 0 0.2rem;
+	padding:3px;
+	white-space:pre;
+}
+tw-folddown {
+	&::after {
+		content: "\25b6";
+	}
+	&.open::after {
+		content: "\25bc";
+	}
+}
+/*
+	This is only visible in Debug View, OR in an error or replay dialog.
+*/
+tw-open-button[replay] {
+	display:none;
+}
+tw-error tw-open-button, tw-eval-replay tw-open-button {
+	display:inline !important;
+}
+tw-open-button::after {
+	content: attr(label);
+}
+tw-notifier {
+	border-radius: 0.2em;
+	padding: 0.2em;
+	font-size: 1rem;
+	background-color: hsla(45, 72%, 55%, 0.4); // A bright yellow.
+	display: none; // Only available in debug mode.
+	.debug-mode & {
+		display: inline;
+	}
+	&::before {
+		content: attr(message);
+	}
+}
+
+/*
+	When a Colour type is printed, it comes out as a <tw-colour> element.
+*/
+tw-colour {
+	border: 1px solid black;
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+}
+
+/*
+	Empty enchantments shouldn't be able to occur, so this exists merely as a safeguard.
+*/
+tw-enchantment:empty {
+	display:none;
+}
